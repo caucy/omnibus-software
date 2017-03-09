@@ -1,0 +1,31 @@
+name "datadog-gohai"
+default_version "master"
+
+env = {
+  "GOROOT" => "/usr/local/go",
+  "GOPATH" => "/var/cache/omnibus/src/datadog-gohai"
+}
+
+if ohai['platform_family'] == 'mac_os_x'
+  env.delete "GOROOT"
+  gobin = "/usr/local/bin/go"
+  gohai = "whpv"
+else
+  gobin = "/usr/local/go/bin/go"
+  gohai = "DataDog"
+end
+
+build do
+   ship_license "https://raw.githubusercontent.com/DataDog/gohai/#{version}/LICENSE"
+   ship_license "https://raw.githubusercontent.com/DataDog/gohai/#{version}/THIRD_PARTY_LICENSES.md"
+   # Go get gohai
+   command "#{gobin} get -d -u github.com/#{gohai}/gohai", :env => env
+   # Checkout gohai's deps
+   command "#{gobin} get -u github.com/shirou/gopsutil", :env => env
+   command "git checkout v2.0.0", :env => env, :cwd => "/var/cache/omnibus/src/datadog-gohai/src/github.com/shirou/gopsutil"
+   command "#{gobin} get -u github.com/cihub/seelog", :env => env
+   command "git checkout v2.6", :env => env, :cwd => "/var/cache/omnibus/src/datadog-gohai/src/github.com/cihub/seelog"
+   # Checkout and build gohai
+   command "git checkout #{version} && git pull", :env => env, :cwd => "/var/cache/omnibus/src/datadog-gohai/src/github.com/#{gohai}/gohai"
+   command "cd $GOPATH/src/github.com/#{gohai}/gohai && #{gobin} run make.go '#{gobin}' && mv gohai #{install_dir}/bin/gohai", :env => env
+end
