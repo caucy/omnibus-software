@@ -36,7 +36,7 @@ env["PATH"] = "#{install_dir}/embedded/bin" + File::PATH_SEPARATOR + ENV["PATH"]
 
 build do
   ship_license "https://gist.githubusercontent.com/truthbk/b06f2ea54f6f297c599e/raw/e1fc035d3114cd43e55fabcddd073e20307c129e/libpcap.license"
-  command "./configure --prefix=#{install_dir}/embedded", :env => env
+  command "./configure --prefix=#{install_dir}/embedded --with-libpcap-libraries=#{install_dir}/embedded/lib", :env => env
   command "make -j #{workers}", :env => env
   command "make -j #{workers} install", :env => env
 end
