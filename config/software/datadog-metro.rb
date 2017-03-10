@@ -17,6 +17,25 @@ else
 end
 
 build do
+
+	if redhat?
+	  build_env = {
+	    "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
+	    "LDFLAGS" => "-L/#{install_dir}/embedded/lib/libpcap.a -I#{install_dir}/embedded/include",
+	    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
+	    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include/"
+	  	}
+	elsif debian?
+	  build_env = {
+	    "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
+	    "LDFLAGS" => "/usr/local/Cellar/libpcap/1.8.1/lib/libpcap.a",
+	    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
+	    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include/"
+	  	}
+	end
+
+
+   
    ship_license "https://raw.githubusercontent.com/DataDog/go-metro/master/LICENSE"
    ship_license "https://raw.githubusercontent.com/DataDog/go-metro/master/THIRD_PARTY_LICENSES.md"
    command "mkdir -p /var/cache/omnibus/src/datadog-metro/src/github.com/DataDog", :env => env
@@ -27,8 +46,8 @@ build do
    command "#{gobin} get -v -d github.com/DataDog/datadog-go/statsd", :env => env, :cwd => "/var/cache/omnibus/src/datadog-metro"
    command "#{gobin} get -v -d gopkg.in/tomb.v2", :env => env, :cwd => "/var/cache/omnibus/src/datadog-metro"
    command "#{gobin} get -v -d gopkg.in/yaml.v2", :env => env, :cwd => "/var/cache/omnibus/src/datadog-metro"
-   patch :source => "libpcap-static-link.patch", :plevel => 1,
-         :acceptable_output => "Reversed (or previously applied) patch detected",
-         :target => "/var/cache/omnibus/src/datadog-metro/src/github.com/google/gopacket/pcap/pcap.go"
+   #patch :source => "libpcap-static-link.patch", :plevel => 1,
+         #:acceptable_output => "Reversed (or previously applied) patch detected",
+         #:target => "/var/cache/omnibus/src/datadog-metro/src/github.com/google/gopacket/pcap/pcap.go"
    command "#{gobin} build -o #{install_dir}/bin/go-metro github.com/DataDog/go-metro", :env => env, :cwd => "/var/cache/omnibus/src/datadog-metro"
 end
