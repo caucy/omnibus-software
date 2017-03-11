@@ -16,10 +16,10 @@
 #
 
 name "libpcap"
-default_version "1.8.1"
+default_version "1.7.4"
 
-version "1.8.1" do
-  source md5: "3d48f9cd171ff12b0efd9134b52f1447"
+version "1.7.4" do
+  source md5: "b2e13142bbaba857ab1c6894aedaf547"
 end
 
 source url: "http://www.tcpdump.org/release/libpcap-#{version}.tar.gz"
