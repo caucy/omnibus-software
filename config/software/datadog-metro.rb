@@ -18,21 +18,13 @@ end
 
 build do
 
-	if redhat?
-	  build_env = {
-	    "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
-	    "LDFLAGS" => "-L/#{install_dir}/embedded/lib/libpcap.a -I#{install_dir}/embedded/include",
-	    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-	    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include/"
-	  	}
-	elsif debian?
-	  build_env = {
-	    "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
-	    "LDFLAGS" => "/usr/local/Cellar/libpcap/1.8.1/lib/libpcap.a",
-	    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-	    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include/"
-	  	}
-	end
+  build_env = {
+    "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
+    "LDFLAGS" => "/opt/paas-agent/embedded/lib/libpcap.a",
+    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
+    "CFLAGS" => "-I/opt/paas-agent/embedded/include"
+	}
+
 
 
    
