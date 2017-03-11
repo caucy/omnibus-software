@@ -20,7 +20,7 @@ build do
 
   build_env = {
     "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
-    "LDFLAGS" => "/opt/paas-agent/embedded/lib/libpcap.a",
+    "LDFLAGS" => "/opt/paas-agent/embedded/lib/",
     "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
     "CFLAGS" => "-I/opt/paas-agent/embedded/include"
 	}
