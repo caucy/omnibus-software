@@ -3,7 +3,10 @@ default_version "last-stable"
 
 env = {
   "GOROOT" => "/usr/local/go",
-  "GOPATH" => "/var/cache/omnibus/src/datadog-metro"
+  "GOPATH" => "/var/cache/omnibus/src/datadog-metro",
+ "LDFLAGS" => "/opt/paas-agent/embedded/lib/",
+    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
+    "CFLAGS" => "-I/opt/paas-agent/embedded/include"
 }
 
 dependency "libpcap"
@@ -17,15 +20,6 @@ else
 end
 
 build do
-
-  build_env = {
-    "PATH" => "/#{install_dir}/embedded/bin:#{ENV['PATH']}",
-    "LDFLAGS" => "/opt/paas-agent/embedded/lib/",
-    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-    "CFLAGS" => "-I/opt/paas-agent/embedded/include"
-	}
-
-
 
    
    ship_license "https://raw.githubusercontent.com/DataDog/go-metro/master/LICENSE"
